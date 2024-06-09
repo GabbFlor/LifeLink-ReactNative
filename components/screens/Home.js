@@ -3,30 +3,46 @@
 import { View, Text, TextInput, Pressable, Image, Alert, ScrollView, Button, TouchableOpacity } from 'react-native';
 import { db, auth } from '../../firebase';
 import React, { useState, useEffect } from "react";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { onAuthStateChanged } from 'firebase/auth';
 import style from '../../style/style';
 import { Ionicons } from '@expo/vector-icons'
+import { deleteDoc, doc } from 'firebase/firestore';
 
 export default function Home() {
     const [posts, setPosts] = useState([]);
 
-    useEffect(() => {
-        const getPosts = async () => {
-          try {
+    const getPosts = async () => {
+        try {
             const postsSnapshot = await db.collection('Postagens')
-              .orderBy('timestamp', 'desc') // Ordena os posts por timestamp, do mais recente para o mais antigo
-              .get();
-      
+                .orderBy('timestamp', 'desc')
+                .get();
+
             const postsData = postsSnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
             setPosts(postsData);
-          } catch (error) {
+        } catch (error) {
             console.error('Erro ao buscar os posts:', error);
-          }
-        };
-        getPosts();
-    }, []); // Remova searchTerm como dependência
-      
+        }
+    };
+
+    // logica para recarregar a pag quando deletar ou adicionar post
+    useFocusEffect(
+        React.useCallback(() => {
+            getPosts();
+        }, [])
+    );
+    
+    async function deletePost(id) {
+        try {
+            const postDoc = doc(db, 'Postagens', id);
+            await deleteDoc(postDoc);
+            await getPosts();
+            Alert.alert("Post deletado com sucesso!");
+        } catch (error) {
+            Alert.alert("Erro", `Erro ao deletar o post: ${error}`);
+        }
+    }
+
     const [user, setUser] = useState(null);
     const navigation = useNavigation();
 
@@ -86,7 +102,7 @@ export default function Home() {
 
                                         {
                                             post.userUID === user.uid ? (
-                                                <TouchableOpacity>
+                                                <TouchableOpacity onPress={() => deletePost(post.id)}>
                                                     <Ionicons name='trash-outline' color={"#fff"} size={28} />
                                                 </TouchableOpacity>
                                             ) : (

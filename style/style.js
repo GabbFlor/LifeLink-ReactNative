@@ -192,4 +192,34 @@ export default StyleSheet.create({
         flexDirection: "row",
         gap: 5
     },
+
+    // add publi
+    addPubli: {
+        backgroundColor: "black",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        gap: 15
+    },
+
+    inputConteudo: {
+        backgroundColor: "#252525",
+        color: "white",
+        height: 200,
+        fontSize: 17.5,
+        width: "92.5%",
+        borderRadius: 7.5,
+        padding: 5,
+        borderColor: "#f7d547",
+        borderWidth:2,
+        textAlignVertical: "top"
+    },
+
+    TitleAddPubli: {
+        fontSize: 27.5,
+        fontWeight: "bold",
+        color: "#fff"
+    },
 })
