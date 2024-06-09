@@ -36,8 +36,8 @@ export default function App() {
               // title:'',
               header: (props) => ( <CustomHeader /> ),
             }}
-            
             >
+
             <Drawer.Screen 
               name="Home" 
               component={Home}

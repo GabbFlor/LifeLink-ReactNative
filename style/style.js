@@ -92,24 +92,104 @@ export default StyleSheet.create({
 
     customHeader: {
         backgroundColor: "#000",
-        // height: 50
         display: "flex",
         flexDirection:"row",
-        height: 60,
-        alignItems: "center",
-        padding: 5,
-        // marginTop: 23.5
+        justifyContent: "space-between",
+        height: 80,
+        alignItems: "flex-end",
+        paddingLeft: 15,
+        paddingRight: 15,
+        paddingBottom: 11
     },
 
     searchBar: {
         backgroundColor: "#252525",
         width: "75%",
-        margin: "auto",
         height: 35,
         borderRadius: 7.5,
         padding: 5,
         borderColor: "#f7d547",
         borderWidth:1,
         fontSize: 15
-    }
+    },
+
+    // post
+
+    postagensScrool: {
+        backgroundColor: "black",
+        height: "100%"
+    },
+
+    escritaUser: {
+        color: "white",
+        fontSize: 16,
+        fontWeight: "bold",
+    },
+
+    escritaTitulo: {
+        color: "white",
+        fontSize: 14
+    },
+
+    escritaConteudo: {
+        color: "white",
+        textAlign: "justify",
+        fontSize: 14
+    },
+
+    post: {
+        // backgroundColor: "red",
+        margin: 10
+    },
+
+    imgPerfil: {
+        height: 55,
+        width: 55,
+        borderRadius: 100,
+        borderWidth: 2,
+        borderColor: "#f7d547"
+    },
+
+    headerPost: {
+        // backgroundColor: "blue",
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 7.5,
+        padding: 5
+    },
+
+    viewImage: {
+        // backgroundColor: "green",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: 2.5,
+        maxHeight: 252.5,
+        maxWidth: "100%",
+        overflow: "hidden",
+    },
+
+    postImage: {
+        height: "100%",
+        width: "100%",
+        maxHeight: 350,
+        maxWidth: 350,
+        borderRadius: 15,
+        // backgroundColor: "blue"
+    },
+
+    viewConteudo: {
+        paddingTop: 10,
+        paddingBottom: 5,
+        paddingLeft: 10,
+        paddingRight: 10,
+    },
+
+    iconsPost: {
+        display: "flex",
+        flexDirection: "row",
+        gap: 5
+    },
 })
