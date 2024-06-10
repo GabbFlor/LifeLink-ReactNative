@@ -18,7 +18,7 @@ export default function Login() {
                 const user = userCredentials.user;
                 Alert.alert(
                     'Login realizado com sucesso',
-                    `Bem-vindo(a), ${user.email}`
+                    `Seja Bem-vindo(a) ao LifeLink! `
                 );
 
                 const userInfo = {
@@ -39,14 +39,17 @@ export default function Login() {
                         errorMessage = 'Senha incorreta. Verifique sua senha e tente novamente.';
                         break;
                     case 'auth/invalid-email':
-                        errorMessage = 'Email incorreto. Verifique seu email e tente novamente.';
+                        errorMessage = 'Email incorreto. Verifique a formatação do mesmo e tente novamente.';
+                        break;
+                    case 'auth/invalid-credential':
+                        errorMessage = 'Senha ou email incorreto.';
                         break;
                     default:
                         errorMessage = `Ocorreu um erro inesperado. ${error}`;
                         break;
                 }
 
-                Alert.alert('Erro ao registrar', errorMessage);
+                Alert.alert('Erro ao fazer login', errorMessage);
             });
     }
 

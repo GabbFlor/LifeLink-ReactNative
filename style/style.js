@@ -222,4 +222,77 @@ export default StyleSheet.create({
         fontWeight: "bold",
         color: "#fff"
     },
+
+    // pag de perfil
+    profilePag: {
+        backgroundColor: "#000",
+        height: "100%",
+    },
+
+    informationsStrings: {
+        color: "#fff",
+        fontSize: 10,
+    },
+
+    profileTitle: {
+        color: "#fff",
+        fontSize: 22.5,
+        textAlign: "center",
+        color: "#f7d547",
+        fontWeight: "bold"
+    },
+
+    profileInformations: {
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-around"
+    },
+
+    profileHeader: {
+        paddingLeft: 10,
+        paddingRight: 10,
+        paddingTop: 10,
+        paddingBottom: 20,
+        borderBottomWidth: 1,
+        borderBottomColor: "#fff",
+    },
+
+    imgProfile: {
+        height: 100,
+        width: 100,
+    },
+
+    profileStrings: {
+        display: "flex",
+        flexDirection: "column",
+        gap: 15
+    },
+
+    informations: {
+        display: "flex",
+        flexDirection: "row",
+        gap: 10
+    },
+
+    profileIcons: {
+        display: "flex",
+        flexDirection: "row-reverse",
+        paddingRight: 10,
+        paddingLeft: 10,
+        paddingTop: 10,
+        gap: 5
+        // paddingBottom: 10
+    },
+
+    profilePublis: {
+        color: "#fff",
+        fontSize: 25,
+        fontWeight: "bold",
+        textAlign: "center"
+    },
+
+    contentProfile: {
+        paddingTop: 20
+    },
 })

@@ -2,7 +2,7 @@ import { View, Text, TextInput, Pressable, Image, Alert, ScrollView, TouchableOp
 import style from '../../style/style';
 import { useState, useRef, useEffect } from 'react';
 import { auth, db } from '../../firebase';
-import { collection, addDoc, Timestamp } from "firebase/firestore";
+import { collection, addDoc, Timestamp, doc, getDoc } from "firebase/firestore";
 import { useNavigation } from '@react-navigation/native';
 import firebase from 'firebase/compat/app';
 
@@ -34,10 +34,18 @@ export default function AddPubli() {
             Alert.alert("Erro", `Nenhuma das informações podem estar vazias.`)
         } else {
             try {
+                // comando feito para puxar as informações de userName do documento "Users" no banco
+                const userDocRef = doc(db, "Users", user.uid);
+                const docSnap = await getDoc(userDocRef);
+                const userData = docSnap.data();
+                // Alert.alert("teste", `Email: ${userData.Email}; nome: ${userData.Nome}`)
+                // isso foi necessário pois a sessão do email e senha não contém nome de usuário incluso, 
+                // por isso é necessário imprimir no banco e depois puxar aqui para funcionar
+
                 await addDoc(userCollectionRef, {
                     userEmail : user.email,
                     userPhoto : linkIMG,
-                    userName : "teste123",
+                    userName : userData.Nome,
                     userUID : user.uid,
                     title : titulo,
                     content : conteudo,

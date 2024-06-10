@@ -1,30 +1,46 @@
 import { View, Text, TextInput, Pressable, Image, Alert, ScrollView, TouchableOpacity } from 'react-native';
-import { auth } from '../../firebase';
+import { auth, db } from '../../firebase';
 import React, { useState } from "react";
 import style from '../../style/style';
 import { useNavigation } from '@react-navigation/native';
+import { collection, addDoc, Timestamp, doc, setDoc } from 'firebase/firestore';
+import firebase from 'firebase/compat/app';
 
 export default function Registro() {
+    const [userName, setUserName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigation = useNavigation();
+    const linkIMG = "https://firebasestorage.googleapis.com/v0/b/sprint-rede-social.appspot.com/o/images%2Fimg-profile.png?alt=media&token=1551ceb6-ea51-4a0b-bdd3-65ce9ce2e0e0";
 
-    // confirmações
-    const [confirmEmail, setConfirmEmail] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-
-    const handleRegister = () => {
-        auth.createUserWithEmailAndPassword(email, password)
-        .then(userCredentials => {
+    const handleRegister = async (e) => {
+        e.preventDefault();
+        const now = new Date();
+    
+        try {
+            // Cria o usuário com email e senha
+            const userCredentials = await auth.createUserWithEmailAndPassword(email, password);
             const user = userCredentials.user;
-            Alert.alert(
-                `Registro realizado com sucesso`,
-                `Usuário: ${email}`
-            );
-          })
-          .catch(error => {
+    
+            // Alerta de sucesso no registro
+            // Alert.alert(
+            //     `Registro realizado com sucesso`,
+            //     `Usuário: ${user.email}`
+            // );
+    
+            const userDocRef = doc(db, "Users", user.uid);
+
+            // Salva os dados do usuário na coleção "Users"
+            await setDoc(userDocRef, {
+                Email: user.email,
+                FirstLogin: Timestamp.fromDate(now),
+                Nome: userName,
+                userIMG: linkIMG
+            });
+        } catch (error) {
             let errorMessage;
-        
+    
+            // Erros ao fazer login
             switch (error.code) {
                 case 'auth/email-already-in-use':
                     errorMessage = 'Este email já está em uso. Por favor, use outro email.';
@@ -39,13 +55,15 @@ export default function Registro() {
                     errorMessage = 'A senha é muito curta. Por favor, insira uma senha com pelo menos 6 caracteres.';
                     break;
                 default:
-                    errorMessage = 'Ocorreu um erro inesperado. Por favor, tente novamente mais tarde.';
+                    errorMessage = `Ocorreu um erro inesperado. Por favor, tente novamente mais tarde. erro: ${error}`;
                     break;
             }
-        
-        Alert.alert('Erro ao registrar', errorMessage);
-          });
-    }
+    
+            // Alerta de erro
+            Alert.alert('Erro ao registrar', errorMessage);
+        }
+    };
+    
 
     function linkPress() {
         navigation.navigate('Login');
@@ -63,31 +81,25 @@ export default function Registro() {
 
                 <TextInput
                     style={style.inputs}
+                    placeholder="Nome de usuário"
+                    value={userName}
+                    onChangeText={text => setUserName(text)}
+                    placeholderTextColor="#fff"
+                />
+
+                <TextInput
+                    style={style.inputs}
                     placeholder="Email"
                     value={email}
                     onChangeText={text => setEmail(text)}
                     placeholderTextColor="#fff"
                 />
-                <TextInput
-                    style={style.inputs}
-                    placeholder="Confirme o email"
-                    value={confirmEmail}
-                    onChangeText={text => setConfirmEmail(text)}
-                    placeholderTextColor="#fff"
-                />
+                
                 <TextInput
                     style={style.inputs}
                     placeholder="Password"
                     value={password}
                     onChangeText={text => setPassword(text)}
-                    secureTextEntry
-                    placeholderTextColor="#fff"
-                />
-                <TextInput
-                    style={style.inputs}
-                    placeholder="Confirme a sua senha"
-                    value={confirmPassword}
-                    onChangeText={text => setConfirmPassword(text)}
                     secureTextEntry
                     placeholderTextColor="#fff"
                 />
