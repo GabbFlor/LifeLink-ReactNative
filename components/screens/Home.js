@@ -43,6 +43,10 @@ export default function Home() {
         }
     }
 
+    // function openProfile(uid) {
+    //     navigation.navigate('Perfil', { dynamicUID: uid })
+    // }
+
     const [user, setUser] = useState(null);
     const navigation = useNavigation();
 
@@ -109,6 +113,11 @@ export default function Home() {
                                                 <View />
                                             )
                                         }
+
+                                        {/* teste rota dinâmica */}
+                                        {/* <TouchableOpacity onPress={() => openProfile(post.userUID)}>
+                                            <Text style={style.escritaConteudo}>Abrir perfil</Text>
+                                        </TouchableOpacity> */}
                                     </View>
                                 </View>
                             </View>

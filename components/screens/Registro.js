@@ -35,7 +35,7 @@ export default function Registro() {
                 Email: user.email,
                 FirstLogin: Timestamp.fromDate(now),
                 Nome: userName,
-                userIMG: linkIMG
+                UserIMG: linkIMG
             });
         } catch (error) {
             let errorMessage;

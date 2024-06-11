@@ -1,6 +1,6 @@
 import { View, Text, TextInput, Pressable, Image, Alert, ScrollView, Button, TouchableOpacity } from 'react-native';
 import React, { useState, useEffect } from "react";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { onAuthStateChanged } from 'firebase/auth';
 import style from '../../style/style';
 import { Ionicons } from '@expo/vector-icons'
@@ -11,22 +11,39 @@ import { auth, db } from '../../firebase';
 export default function Profile() {
     const [user, setUser] = useState(null);
     const navigation = useNavigation();
-    const [profile, setProfile] = useState({ Email: '', FirstLogin: '', Nome: '', UserIMG: '' });
-
     auth.onAuthStateChanged((user) => { setUser(user) });
+    const [users, setUsers] = useState({ Email: '', FirstLogin: '', Nome: '', UserIMG: '' });
 
+    // reconheçe o UID do usuário logado e define como variavel de ambiente
+    let userUIDLoged;
+    if(user) {
+        userUIDLoged = user.uid;
+    }
+
+    // função para deslogar o usuário
     function userSignOut() {
         auth.signOut()
         // navigation.navigate('Login');
     }
 
-    let userUID, userEmail;
+    useEffect(() => {
+        async function fetchContact() {
+            try {
+                // recupera os dados do contato pela id recuperada da URL
+                const UsersDoc = await getDoc(doc(db, 'Users', userUIDLoged));
+                if (UsersDoc.exists()) {
+                    // atualiza o estado do contato com os dados recuperados pelo id
+                    setUsers(UsersDoc.data());
+                } else {
+                    Alert.alert("Usuário não encontrado, contate um administrador.")
+                }
+            } catch (error) {
+                // Alert.alert("deu ruim no CATCH" + ` ${error}`)
+            }
+        }
 
-    if (user) {
-        userUID = user.uid;
-        userEmail = user.email;
-    }
-
+        fetchContact(); //chama a função
+    }, [userUIDLoged]); //executa o efeito sempre que o ID da url muda
 
     return (
         <View style={style.profilePag}>
@@ -43,10 +60,10 @@ export default function Profile() {
 
                 <View style={style.profileInformations}>
                     <View style={style.imgProfileDiv}>
-                        <Image source={require('../../assets/img-profile.png')} style={style.imgProfile} />
+                        <Image source={{ uri: `${users.UserIMG}` }} style={style.imgProfile} />
                     </View>
                     <View style={style.profileStrings}>
-                        <Text style={style.profileTitle}>Nome do perfil</Text>
+                        <Text style={style.profileTitle}>{users.Nome}</Text>
                         <View style={style.informations}>
                             <Text style={style.informationsStrings}>4 publicações</Text>
                             <Text style={style.informationsStrings}>300 seguidores</Text>
@@ -61,21 +78,4 @@ export default function Profile() {
             </View>
         </View>
     )
-
-
-    // if (user) {
-    //     return (
-    //         <View>
-    //             <Text>email: {user.email}</Text>
-    //             <Text>uid: {user.uid}</Text>
-    //             <Button title="Logout" onPress={userSignOut} />
-    //         </View>
-    //     ) 
-    // } else {
-    //     return (
-    //         <View>
-    //             <Text>Sem usuário autenticado</Text>
-    //         </View>
-    //     ) 
-    // }
 }
